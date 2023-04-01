@@ -28,10 +28,17 @@
 #define PIN_BUTTON_R2   -1          // R2 / RT / ZR / R2 / 8 / K3
 #define PIN_BUTTON_L2   29          // L2 / LT / ZL / L2 / 7 / K4
 #define PIN_BUTTON_B3   5           // B3 / X / Y / Square / 1 / P1
+<<<<<<< HEAD
 #define PIN_BUTTON_B4   2           // B4 / Y / X / Triangle / 4 / P2
 #define PIN_BUTTON_R1   -1          // R1 / RB / R / R1 / 6 / P3
 #define PIN_BUTTON_L1   28          // L1 / LB / L / L1 / 5 / P4
 #define PIN_BUTTON_S1   -1          // S1 / Back / Minus / Select / 9 / Coin
+=======
+#define PIN_BUTTON_B4   4           // B4 / Y / X / Triangle / 4 / P2
+#define PIN_BUTTON_R1   -1          // R1 / RB / R / R1 / 6 / P3
+#define PIN_BUTTON_L1   -1          // L1 / LB / L / L1 / 5 / P4
+#define PIN_BUTTON_S1   20          // S1 / Back / Minus / Select / 9 / Coin
+>>>>>>> 3a66268 (feature: updates kb2040 for jslider toggle and updates jslider toggle to support active high)
 #define PIN_BUTTON_S2   18          // S2 / Start / Plus / Start / 10 / Start
 #define PIN_BUTTON_L3   -1          // L3 / LS / LS / L3 / 11 / LS
 #define PIN_BUTTON_R3   -1          // R3 / RS / RS / R3 / 12 / RS
@@ -39,10 +46,15 @@
 #define PIN_BUTTON_A2   -1          // A2 / ~ / Capture / ~ / 14 / ~
 #define PIN_BUTTON_TURBO -1         // Turbo
 #define PIN_BUTTON_REVERSE -1       // UDLR Reverse
+<<<<<<< HEAD
 #define PIN_SLIDER_LS   -1          // Left Stick Slider
 #define PIN_SLIDER_RS    6          // Right Stick Slider
 #define PIN_SLIDER_SOCD_ONE    -1   // SOCD Slider Pin One
 #define PIN_SLIDER_SOCD_TWO    -1   // SOCD Slider Pin Two
+=======
+#define PIN_SLIDER_LS    6          // Left Stick Slider
+#define PIN_SLIDER_RS    7          // Right Stick Slider
+>>>>>>> 3a66268 (feature: updates kb2040 for jslider toggle and updates jslider toggle to support active high)
 
 // This is the SOCD section.
 // SOCD stands for `simultaneous opposing cardinal directions`.
@@ -194,7 +206,11 @@
 #define REVERSE_LEFT_DEFAULT 1
 #define REVERSE_RIGHT_DEFAULT 1
 
+<<<<<<< HEAD
 #define JSLIDER_ENABLED 1 // TODO LOOK?!
+=======
+#define JSLIDER_ENABLED 1
+>>>>>>> 3a66268 (feature: updates kb2040 for jslider toggle and updates jslider toggle to support active high)
 #define BUTTON_LAYOUT BUTTON_LAYOUT_STICK
 #define BUTTON_LAYOUT_RIGHT BUTTON_LAYOUT_VEWLIX
 #define SPLASH_MODE NOSPLASH

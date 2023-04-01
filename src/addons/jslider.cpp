@@ -29,7 +29,6 @@ void JSliderInput::setup()
         }
     }
 }
-
 DpadMode JSliderInput::read() {
     const SliderOptions& options = Storage::getInstance().getAddonOptions().sliderOptions;
     Mask_t values = ~gpio_get_all();
