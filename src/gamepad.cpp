@@ -133,7 +133,12 @@ void Gamepad::setup()
 		{
 			gpio_init(pin);             // Initialize pin
 			gpio_set_dir(pin, GPIO_IN); // Set as INPUT
-			gpio_pull_up(pin);          // Set as PULLUP
+			
+			#ifdef PIN_ACTIVE_HIGH
+				gpio_pull_down(pin);          // Set as PULLDOWN
+			#else
+				gpio_pull_up(pin);          // Set as PULLUP
+			#endif
 			switch (pinMappings[pin]) {
 				case GpioAction::BUTTON_PRESS_UP:	mapDpadUp->pinMask |= 1 << pin; break;
 				case GpioAction::BUTTON_PRESS_DOWN:	mapDpadDown->pinMask |= 1 << pin; break;
@@ -157,6 +162,7 @@ void Gamepad::setup()
 				default:				break;
 			}
 		}
+		
 	}
 
 	// setup PS5 compatibility
@@ -278,7 +284,12 @@ void Gamepad::process()
 void Gamepad::read()
 {
 	// Need to invert since we're using pullups
-	Mask_t values = ~gpio_get_all();
+	#ifdef PIN_ACTIVE_HIGH
+		Mask_t values = gpio_get_all();
+	#else
+		// Need to invert since we're using pullups
+		Mask_t values = ~gpio_get_all();;
+	#endif
 	// Get the midpoint value for the current mode
 	uint16_t joystickMid = GetJoystickMidValue(options.inputMode);
 
