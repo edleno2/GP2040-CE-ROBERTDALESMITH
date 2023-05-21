@@ -9,6 +9,7 @@
 
 #include "FlashPROM.h"
 #include "CRC32.h"
+#include "SNESpad.h"
 
 // MUST BE DEFINED for mpgs
 uint32_t getMillis() {
@@ -19,6 +20,7 @@ uint64_t getMicro() {
 	return to_us_since_boot(get_absolute_time());
 }
 
+static SNESpad * snes;
 
 static HIDReport hidReport
 {
@@ -83,6 +85,11 @@ static KeyboardReport keyboardReport
 
 void Gamepad::setup()
 {
+	//snes hack
+	snes = new SNESpad(5, 6, 7);
+	snes->begin();
+    snes->start();
+
 	//load(); // MPGS loads
 	options = mpgStorage->getGamepadOptions();
 
@@ -196,36 +203,90 @@ void Gamepad::read()
 	;
 	#endif
 
-	state.dpad = 0
-		| ((values & mapDpadUp->pinMask)    ? (options.invertYAxis ? mapDpadDown->buttonMask : mapDpadUp->buttonMask) : 0)
-		| ((values & mapDpadDown->pinMask)  ? (options.invertYAxis ? mapDpadUp->buttonMask : mapDpadDown->buttonMask) : 0)
-		| ((values & mapDpadLeft->pinMask)  ? mapDpadLeft->buttonMask  : 0)
-		| ((values & mapDpadRight->pinMask) ? mapDpadRight->buttonMask : 0)
+	snes->poll();
+
+    state.dpad = 0
+		| ((snes->directionUp)    ? (options.invertYAxis ? mapDpadDown->buttonMask : mapDpadUp->buttonMask) : 0)
+		| ((snes->directionDown)  ? (options.invertYAxis ? mapDpadUp->buttonMask : mapDpadDown->buttonMask) : 0)
+		| ((snes->directionLeft)  ? mapDpadLeft->buttonMask  : 0)
+		| ((snes->directionRight) ? mapDpadRight->buttonMask : 0)
 	;
 
-	state.buttons = 0
-		| ((values & mapButtonB1->pinMask)  ? mapButtonB1->buttonMask  : 0)
-		| ((values & mapButtonB2->pinMask)  ? mapButtonB2->buttonMask  : 0)
-		| ((values & mapButtonB3->pinMask)  ? mapButtonB3->buttonMask  : 0)
-		| ((values & mapButtonB4->pinMask)  ? mapButtonB4->buttonMask  : 0)
-		| ((values & mapButtonL1->pinMask)  ? mapButtonL1->buttonMask  : 0)
-		| ((values & mapButtonR1->pinMask)  ? mapButtonR1->buttonMask  : 0)
-		| ((values & mapButtonL2->pinMask)  ? mapButtonL2->buttonMask  : 0)
-		| ((values & mapButtonR2->pinMask)  ? mapButtonR2->buttonMask  : 0)
-		| ((values & mapButtonS1->pinMask)  ? mapButtonS1->buttonMask  : 0)
-		| ((values & mapButtonS2->pinMask)  ? mapButtonS2->buttonMask  : 0)
-		| ((values & mapButtonL3->pinMask)  ? mapButtonL3->buttonMask  : 0)
-		| ((values & mapButtonR3->pinMask)  ? mapButtonR3->buttonMask  : 0)
-		| ((values & mapButtonA1->pinMask)  ? mapButtonA1->buttonMask  : 0)
-		| ((values & mapButtonA2->pinMask)  ? mapButtonA2->buttonMask  : 0)
-	;
+	if (snes->type == SNES_PAD_BASIC) {
+		state.buttons = 0
+			| ((snes->buttonB)  ? mapButtonB1->buttonMask  : 0)
+			| ((snes->buttonA)  ? mapButtonB2->buttonMask  : 0)
+			| ((snes->buttonY)  ? mapButtonB3->buttonMask  : 0)
+			| ((snes->buttonX)  ? mapButtonB4->buttonMask  : 0)
+			| ((snes->buttonL)  ? mapButtonL1->buttonMask  : 0)
+			| ((snes->buttonR)  ? mapButtonR1->buttonMask  : 0)
+			| ((0) ? mapButtonL2->buttonMask  : 0)
+			| ((0) ? mapButtonR2->buttonMask  : 0)
+			| ((snes->buttonSelect)  ? mapButtonS1->buttonMask  : 0)
+			| ((snes->buttonStart)  ? mapButtonS2->buttonMask  : 0)
+			| ((0) ? mapButtonL3->buttonMask  : 0)
+			| ((0) ? mapButtonR3->buttonMask  : 0)
+			| ((0) ? mapButtonA1->buttonMask  : 0)
+			| ((0) ? mapButtonA2->buttonMask  : 0)
+		;
 
-	state.lx = GAMEPAD_JOYSTICK_MID;
-	state.ly = GAMEPAD_JOYSTICK_MID;
+		hasLeftAnalogStick = false;
+		state.lx = GAMEPAD_JOYSTICK_MID;
+		state.ly = GAMEPAD_JOYSTICK_MID;
+
+    } else if (snes->type == SNES_PAD_NES) {
+    	state.buttons = 0
+			| ((snes->buttonB)  ? mapButtonB1->buttonMask  : 0)
+			| ((snes->buttonA)  ? mapButtonB2->buttonMask  : 0)
+			| ((0)  ? mapButtonB3->buttonMask  : 0)
+			| ((0)  ? mapButtonB4->buttonMask  : 0)
+			| ((0)  ? mapButtonL1->buttonMask  : 0)
+			| ((0)  ? mapButtonR1->buttonMask  : 0)
+			| ((0) ? mapButtonL2->buttonMask  : 0)
+			| ((0) ? mapButtonR2->buttonMask  : 0)
+			| ((snes->buttonSelect)  ? mapButtonS1->buttonMask  : 0)
+			| ((snes->buttonStart)  ? mapButtonS2->buttonMask  : 0)
+			| ((0) ? mapButtonL3->buttonMask  : 0)
+			| ((0) ? mapButtonR3->buttonMask  : 0)
+			| ((0) ? mapButtonA1->buttonMask  : 0)
+			| ((0) ? mapButtonA2->buttonMask  : 0)
+		;
+
+		hasLeftAnalogStick = false;
+		state.lx = GAMEPAD_JOYSTICK_MID;
+		state.ly = GAMEPAD_JOYSTICK_MID;
+
+    } else if (snes->type == SNES_PAD_MOUSE){
+    	state.buttons = 0
+			| ((snes->buttonB)  ? mapButtonB1->buttonMask  : 0)
+			| ((snes->buttonA)  ? mapButtonB2->buttonMask  : 0)
+			| ((0)  ? mapButtonB3->buttonMask  : 0)
+			| ((0)  ? mapButtonB4->buttonMask  : 0)
+			| ((0)  ? mapButtonL1->buttonMask  : 0)
+			| ((0)  ? mapButtonR1->buttonMask  : 0)
+			| ((0) ? mapButtonL2->buttonMask  : 0)
+			| ((0) ? mapButtonR2->buttonMask  : 0)
+			| ((0)  ? mapButtonS1->buttonMask  : 0)
+			| ((0)  ? mapButtonS2->buttonMask  : 0)
+			| ((0) ? mapButtonL3->buttonMask  : 0)
+			| ((0) ? mapButtonR3->buttonMask  : 0)
+			| ((0) ? mapButtonA1->buttonMask  : 0)
+			| ((0) ? mapButtonA2->buttonMask  : 0)
+		;
+
+		hasLeftAnalogStick = true;
+		state.lx = map((snes->mouseX),255,0,GAMEPAD_JOYSTICK_MIN,GAMEPAD_JOYSTICK_MAX);
+		state.ly = map((snes->mouseY),0,255,GAMEPAD_JOYSTICK_MIN,GAMEPAD_JOYSTICK_MAX);
+    }
+
 	state.rx = GAMEPAD_JOYSTICK_MID;
 	state.ry = GAMEPAD_JOYSTICK_MID;
 	state.lt = 0;
 	state.rt = 0;
+}
+
+uint16_t Gamepad::map(uint16_t x, uint16_t in_min, uint16_t in_max, uint16_t out_min, uint16_t out_max) {
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
 void Gamepad::debounce() {

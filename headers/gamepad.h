@@ -167,6 +167,7 @@ private:
 	void releaseAllKeys(void);
 	void pressKey(uint8_t code);
 	uint8_t getModifier(uint8_t code);
+    uint16_t map(uint16_t x, uint16_t in_min, uint16_t in_max, uint16_t out_min, uint16_t out_max);
 
 	GamepadHotkeyEntry hotkeyF1Up;
 	GamepadHotkeyEntry hotkeyF1Down;
