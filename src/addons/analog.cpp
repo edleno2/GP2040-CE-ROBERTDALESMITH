@@ -173,7 +173,38 @@ float AnalogInput::readPin(int pin, uint16_t center, bool autoCalibrate) {
 
 	float adc_value = ((float)adc_calibrated) / ADC_MAX;
 
+    adc_value = rescale(adc_value);
+
 	return adc_value;
+}
+
+float AnalogInput::rescale(float originalValue) {
+    // Original range is 0.2 to 0.8, with a span of 0.6.
+    const float originalMin = 0.24;
+    const float originalMax = 0.76;
+    const float originalSpan = originalMax - originalMin;
+
+    // New range is 0 to 1, with a span of 1.
+    const float newMin = 0;
+    const float newMax = 1;
+    const float newSpan = newMax - newMin;
+
+    // First, we normalize the original value, shifting our original range to start at 0.
+    // This is done by subtracting the minimum of our original range.
+    float normalizedValue = originalValue - originalMin;
+
+    // Next, we scale the normalized value based on the ratio of the new span to the original span.
+    float scaledValue = normalizedValue * (newSpan / originalSpan);
+
+    // Finally, we shift the scaled value by the minimum of the new range. 
+    // Since the new minimum is 0 in this case, this step isn't technically necessary, 
+    // but it's included for clarity and in case you want to adapt this code for a different range.
+    float newValue = scaledValue + newMin;
+
+    if (newValue > newMax) newValue = newMax;
+    if (newValue < newMin) newValue = newMin;
+
+    return newValue;
 }
 
 uint16_t AnalogInput::map(uint16_t x, uint16_t in_min, uint16_t in_max, uint16_t out_min, uint16_t out_max) {
