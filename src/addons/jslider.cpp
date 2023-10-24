@@ -31,7 +31,11 @@ void JSliderInput::setup()
 }
 DpadMode JSliderInput::read() {
     const SliderOptions& options = Storage::getInstance().getAddonOptions().sliderOptions;
+#ifdef PIN_ACTIVE_HIGH
+    Mask_t values = gpio_get_all();
+#else
     Mask_t values = ~gpio_get_all();
+#endif
     if (values & dpModeMask)            return DpadMode::DPAD_MODE_DIGITAL;
     else if (values & lsModeMask)       return DpadMode::DPAD_MODE_LEFT_ANALOG;
     else if (values & rsModeMask)       return DpadMode::DPAD_MODE_RIGHT_ANALOG;
@@ -71,8 +75,15 @@ void JSliderInput::process()
     debounce();
 #endif
 
+    AnalogOptions& analogOptions = Storage::getInstance().getAddonOptions().analogOptions;
     Gamepad * gamepad = Storage::getInstance().GetGamepad();
-    if ( gamepad->getOptions().dpadMode != dpadState) {
-        gamepad->setDpadMode(dpadState);
+    if ( analogOptions.analogAdc1Mode != dpadState) {
+        analogOptions.analogAdc1Mode = dpadState;
+        if (analogOptions.analogAdc1Mode == DPAD_MODE_LEFT_ANALOG) {
+            analogOptions.analogAdc2Mode = DPAD_MODE_RIGHT_ANALOG;
+        } else {
+            analogOptions.analogAdc2Mode = DPAD_MODE_LEFT_ANALOG;
+        }
+        gamepad->save();
     }
 }

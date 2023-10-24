@@ -6,7 +6,10 @@
 #ifndef PICO_BOARD_CONFIG_H_
 #define PICO_BOARD_CONFIG_H_
 
-#include <GamepadEnums.h>
+#include "enums.pb.h"
+
+#define BOARD_CONFIG_LABEL "Adafruit KB2040"
+
 #include "NeoPico.hpp"
 
 // This is the main pin definition section.
@@ -21,28 +24,30 @@
 
 #define PIN_DPAD_UP     9           // UP
 #define PIN_DPAD_DOWN   10          // DOWN
-#define PIN_DPAD_RIGHT  19          // RIGHT
-#define PIN_DPAD_LEFT   20          // LEFT
+#define PIN_DPAD_LEFT   19          // LEFT
+#define PIN_DPAD_RIGHT  20          // RIGHT
 #define PIN_BUTTON_B1   3           // B1 / A / B / Cross / 2 / K1
 #define PIN_BUTTON_B2   4           // B2 / B / A / Circle / 3 / K2
-#define PIN_BUTTON_R2   -1          // R2 / RT / ZR / R2 / 8 / K3
-#define PIN_BUTTON_L2   29          // L2 / LT / ZL / L2 / 7 / K4
 #define PIN_BUTTON_B3   5           // B3 / X / Y / Square / 1 / P1
 #define PIN_BUTTON_B4   2           // B4 / Y / X / Triangle / 4 / P2
-#define PIN_BUTTON_R1   -1          // R1 / RB / R / R1 / 6 / P3
 #define PIN_BUTTON_L1   28          // L1 / LB / L / L1 / 5 / P4
+#define PIN_BUTTON_R1   -1          // R1 / RB / R / R1 / 6 / P3
+#define PIN_BUTTON_L2   29          // L2 / LT / ZL / L2 / 7 / K4
+#define PIN_BUTTON_R2   -1          // R2 / RT / ZR / R2 / 8 / K3
 #define PIN_BUTTON_S1   -1          // S1 / Back / Minus / Select / 9 / Coin
 #define PIN_BUTTON_S2   18          // S2 / Start / Plus / Start / 10 / Start
 #define PIN_BUTTON_L3   -1          // L3 / LS / LS / L3 / 11 / LS
 #define PIN_BUTTON_R3   -1          // R3 / RS / RS / R3 / 12 / RS
 #define PIN_BUTTON_A1   -1          // A1 / Guide / Home / PS / 13 / ~
 #define PIN_BUTTON_A2   -1          // A2 / ~ / Capture / ~ / 14 / ~
+#define PIN_BUTTON_FN   -1          // Hotkey Function
+
 #define PIN_BUTTON_TURBO -1         // Turbo
 #define PIN_BUTTON_REVERSE -1       // UDLR Reverse
-#define PIN_SLIDER_LS   -1          // Left Stick Slider
-#define PIN_SLIDER_RS    6          // Right Stick Slider
-#define PIN_SLIDER_SOCD_ONE    -1   // SOCD Slider Pin One
-#define PIN_SLIDER_SOCD_TWO    -1   // SOCD Slider Pin Two
+#define PIN_SLIDER_ONE   -1         // Left Stick Slider
+#define PIN_SLIDER_TWO   -1         // Right Stick Slider
+#define PIN_SLIDER_SOCD_ONE   -1    // SOCD Slider Pin One
+#define PIN_SLIDER_SOCD_TWO   -1    // SOCD Slider Pin Two
 
 // This is the SOCD section.
 // SOCD stands for `simultaneous opposing cardinal directions`.
@@ -58,8 +63,13 @@
 #define SLIDER_SOCD_SLOT_TWO  SOCD_MODE_SECOND_INPUT_PRIORITY
 #define SLIDER_SOCD_SLOT_DEFAULT SOCD_MODE_NEUTRAL
 
+#define DEFAULT_FORCED_SETUP_MODE FORCED_SETUP_MODE_OFF // 	FORCED_SETUP_MODE_OFF, FORCED_SETUP_MODE_LOCK_MODE_SWITCH, FORCED_SETUP_MODE_LOCK_WEB_CONFIG, FORCED_SETUP_MODE_LOCK_BOTH
+#define DEFAULT_LOCK_HOTKEYS false // or true
+
 #define DEFAULT_INPUT_MODE INPUT_MODE_XINPUT //INPUT_MODE_XINPUT (XInput), INPUT_MODE_SWITCH (Nintendo Switch), INPUT_MODE_HID (D-Input), INPUT_MODE_KEYBOARD (Keyboard)
-#define DEFAULT_DPAD_MODE DPAD_MODE_DIGITAL  //DPAD_MODE_DIGITAL, DPAD_MODE_LEFT_ANALOG, DPAD_MODE_RIGHT_ANALOG, 
+#define DEFAULT_DPAD_MODE DPAD_MODE_DIGITAL  //DPAD_MODE_DIGITAL, DPAD_MODE_LEFT_ANALOG, DPAD_MODE_RIGHT_ANALOG
+
+#define DEFAULT_PS4CONTROLLER_TYPE PS4_CONTROLLER
 
 // This is the LEDs section.
 // The default `TURBO_LED_PIN` pin is set to `15` ( it is recommended to run through 3V3(OUT) with a resistor)
@@ -127,8 +137,18 @@
 // The default for `ANALOG_ADC_VRX` and `ANALOG_ADC_VRY` is `-1` which disables them.
 // To enable a `ANALOG_ADC_VRX` and `ANALOG_ADC_VRY`, replace the `-1` with the GPIO pin numbers that are desired. 
 
-#define ANALOG_ADC_VRX 26
-#define ANALOG_ADC_VRY 27
+#define JSLIDER_ENABLED 1
+#define ANALOG_INPUT_ENABLED 1
+
+#define ANALOG_ADC_1_VRX 26
+#define ANALOG_ADC_1_VRY 27
+#define ANALOG_ADC_1_MODE DPAD_MODE_LEFT_ANALOG
+#define ANALOG_ADC_1_INVERT INVERT_Y
+
+#define ANALOG_ADC_2_VRX -1
+#define ANALOG_ADC_2_VRY -1
+#define ANALOG_ADC_2_MODE DPAD_MODE_RIGHT_ANALOG
+#define ANALOG_ADC_2_INVERT INVERT_NONE
 
 // This is the I2C Display section (commonly known as the OLED display section).
 // In this section you can specify if a display as been enabled, which pins are assined to it, the block address and speed.
@@ -200,11 +220,19 @@
 #define REVERSE_LEFT_DEFAULT 1
 #define REVERSE_RIGHT_DEFAULT 1
 
-#define JSLIDER_ENABLED 1
 #define BUTTON_LAYOUT BUTTON_LAYOUT_STICK
 #define BUTTON_LAYOUT_RIGHT BUTTON_LAYOUT_VEWLIX
-#define SPLASH_MODE NOSPLASH
-#define SPLASH_CHOICE MAIN
+
+// The default `SPLASH_MODE` is `NOSPLASH`.
+// There are four options for `SPLASH_MODE` currently:
+// 1 - `STATICSPLASH` - This will display the static splash image
+// 2 - `CLOSEIN` - This will display the static splash image as a top and bottom coming together animation
+// 3 - `CLOSEINCUSTOM` - This will display the custom splash image as a top and bottom coming together animation
+// 4 - `NOSPLASH` - This will not display a splash screen on boot
+// Special note - All of the splash screen images can be changed via `include/bitmaps.h`
+
+#define SPLASH_MODE SPLASH_MODE_NONE
+#define SPLASH_CHOICE SPLASH_CHOICE_MAIN
 #define SPLASH_DURATION 7500 // Duration in milliseconds
 
 // Board LED Add-on Setting
@@ -213,7 +241,7 @@
 //                  on the current mode (config, normal, or no USB data)
 // INPUT_TEST     - Blinks whenever any input is made
 
-#define BOARD_LED_TYPE BOARD_LED_OFF
+#define BOARD_LED_TYPE ON_BOARD_LED_MODE_OFF
 
 // Dual Directional Add-on Options
 
@@ -237,6 +265,7 @@
 #define BUZZER_VOLUME 100
 
 // Extra Button Add-on setting
+#define EXTRA_BUTTON_ENABLED 1
 #define EXTRA_BUTTON_MASK GAMEPAD_MASK_A1 // Sets boot button to Home/Guide button
 #define EXTRA_BUTTON_PIN 11
 
