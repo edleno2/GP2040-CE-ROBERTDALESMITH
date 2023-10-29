@@ -22,30 +22,30 @@
 
 #define PIN_ACTIVE_HIGH 1
 
-#define PIN_DPAD_UP     9           // UP
-#define PIN_DPAD_DOWN   10          // DOWN
-#define PIN_DPAD_LEFT   19          // LEFT
-#define PIN_DPAD_RIGHT  20          // RIGHT
+#define PIN_DPAD_UP     27           // UP
+#define PIN_DPAD_DOWN   29          // DOWN
+#define PIN_DPAD_LEFT   26          // LEFT
+#define PIN_DPAD_RIGHT  28          // RIGHT
 #define PIN_BUTTON_B1   3           // B1 / A / B / Cross / 2 / K1
-#define PIN_BUTTON_B2   4           // B2 / B / A / Circle / 3 / K2
+#define PIN_BUTTON_B2   2           // B2 / B / A / Circle / 3 / K2
 #define PIN_BUTTON_B3   5           // B3 / X / Y / Square / 1 / P1
-#define PIN_BUTTON_B4   2           // B4 / Y / X / Triangle / 4 / P2
-#define PIN_BUTTON_L1   28          // L1 / LB / L / L1 / 5 / P4
-#define PIN_BUTTON_R1   8           // R1 / RB / R / R1 / 6 / P3
-#define PIN_BUTTON_L2   29          // L2 / LT / ZL / L2 / 7 / K4
-#define PIN_BUTTON_R2   7           // R2 / RT / ZR / R2 / 8 / K3
-#define PIN_BUTTON_S1   -1          // S1 / Back / Minus / Select / 9 / Coin
+#define PIN_BUTTON_B4   4           // B4 / Y / X / Triangle / 4 / P2
+#define PIN_BUTTON_L1   -1          // L1 / LB / L / L1 / 5 / P4
+#define PIN_BUTTON_R1   -1          // R1 / RB / R / R1 / 6 / P3
+#define PIN_BUTTON_L2   9           // L2 / LT / ZL / L2 / 7 / K4
+#define PIN_BUTTON_R2   8           // R2 / RT / ZR / R2 / 8 / K3
+#define PIN_BUTTON_S1   20          // S1 / Back / Minus / Select / 9 / Coin
 #define PIN_BUTTON_S2   18          // S2 / Start / Plus / Start / 10 / Start
-#define PIN_BUTTON_L3   -1          // L3 / LS / LS / L3 / 11 / LS
-#define PIN_BUTTON_R3   -1          // R3 / RS / RS / R3 / 12 / RS
+#define PIN_BUTTON_L3   10          // L3 / LS / LS / L3 / 11 / LS
+#define PIN_BUTTON_R3   19          // R3 / RS / RS / R3 / 12 / RS
 #define PIN_BUTTON_A1   -1          // A1 / Guide / Home / PS / 13 / ~
 #define PIN_BUTTON_A2   -1          // A2 / ~ / Capture / ~ / 14 / ~
 #define PIN_BUTTON_FN   -1          // Hotkey Function
 
 #define PIN_BUTTON_TURBO -1         // Turbo
 #define PIN_BUTTON_REVERSE -1       // UDLR Reverse
-#define PIN_SLIDER_ONE   -1         // Left Stick Slider
-#define PIN_SLIDER_TWO   -1         // Right Stick Slider
+#define PIN_SLIDER_ONE    6         // Left Stick Slider
+#define PIN_SLIDER_TWO    7         // Right Stick Slider
 #define PIN_SLIDER_SOCD_ONE   -1    // SOCD Slider Pin One
 #define PIN_SLIDER_SOCD_TWO   -1    // SOCD Slider Pin Two
 
@@ -138,12 +138,12 @@
 // To enable a `ANALOG_ADC_VRX` and `ANALOG_ADC_VRY`, replace the `-1` with the GPIO pin numbers that are desired. 
 
 #define JSLIDER_ENABLED 1
-#define ANALOG_INPUT_ENABLED 1
+#define ANALOG_INPUT_ENABLED 0
 
-#define ANALOG_ADC_1_VRX 26
-#define ANALOG_ADC_1_VRY 27
+#define ANALOG_ADC_1_VRX 1
+#define ANALOG_ADC_1_VRY 1
 #define ANALOG_ADC_1_MODE DPAD_MODE_LEFT_ANALOG
-#define ANALOG_ADC_1_INVERT INVERT_Y
+#define ANALOG_ADC_1_INVERT INVERT_NONE
 
 #define ANALOG_ADC_2_VRX -1
 #define ANALOG_ADC_2_VRY -1

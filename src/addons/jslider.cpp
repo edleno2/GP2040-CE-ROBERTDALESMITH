@@ -86,4 +86,13 @@ void JSliderInput::process()
         }
         gamepad->save();
     }
+    // if ( analogOptions.analogAdc1Mode != dpadState) {
+    //     analogOptions.analogAdc1Mode = dpadState;
+    //     if (analogOptions.analogAdc1Mode == DPAD_MODE_LEFT_ANALOG) {
+    //         analogOptions.analogAdc2Mode = DPAD_MODE_RIGHT_ANALOG;
+    //     } else {
+    //         analogOptions.analogAdc2Mode = DPAD_MODE_LEFT_ANALOG;
+    //     }
+    //     gamepad->save();
+    // }
 }
