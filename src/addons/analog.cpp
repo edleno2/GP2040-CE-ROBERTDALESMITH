@@ -133,19 +133,23 @@ void AnalogInput::process()
     }
 
     // Convert to 16-bit value
-    if ( analogOptions.analogAdc1Mode == DpadMode::DPAD_MODE_LEFT_ANALOG) {
-        gamepad->state.lx = (uint16_t)(65535.0f*adc_1_x);
-        gamepad->state.ly = (uint16_t)(65535.0f*adc_1_y);
-    } else if ( analogOptions.analogAdc1Mode == DpadMode::DPAD_MODE_RIGHT_ANALOG) {
-        gamepad->state.rx = (uint16_t)(65535.0f*adc_1_x);
-        gamepad->state.ry = (uint16_t)(65535.0f*adc_1_y);
+    if (analogOptions.analogAdc1PinX >= 0 || analogOptions.analogAdc1PinY >= 0) {
+        if ( analogOptions.analogAdc1Mode == DpadMode::DPAD_MODE_LEFT_ANALOG) {
+            gamepad->state.lx = (uint16_t)(65535.0f*adc_1_x);
+            gamepad->state.ly = (uint16_t)(65535.0f*adc_1_y);
+        } else if ( analogOptions.analogAdc1Mode == DpadMode::DPAD_MODE_RIGHT_ANALOG) {
+            gamepad->state.rx = (uint16_t)(65535.0f*adc_1_x);
+            gamepad->state.ry = (uint16_t)(65535.0f*adc_1_y);
+        }
     }
-    if ( analogOptions.analogAdc2Mode == DpadMode::DPAD_MODE_LEFT_ANALOG) {
-        gamepad->state.lx = (uint16_t)(65535.0f*adc_2_x);
-        gamepad->state.ly = (uint16_t)(65535.0f*adc_2_y);
-    } else if ( analogOptions.analogAdc2Mode == DpadMode::DPAD_MODE_RIGHT_ANALOG) {
-        gamepad->state.rx = (uint16_t)(65535.0f*adc_2_x);
-        gamepad->state.ry = (uint16_t)(65535.0f*adc_2_y);
+    if (analogOptions.analogAdc2PinX >= 0 || analogOptions.analogAdc2PinY >= 0) {
+        if ( analogOptions.analogAdc2Mode == DpadMode::DPAD_MODE_LEFT_ANALOG) {
+            gamepad->state.lx = (uint16_t)(65535.0f*adc_2_x);
+            gamepad->state.ly = (uint16_t)(65535.0f*adc_2_y);
+        } else if ( analogOptions.analogAdc2Mode == DpadMode::DPAD_MODE_RIGHT_ANALOG) {
+            gamepad->state.rx = (uint16_t)(65535.0f*adc_2_x);
+            gamepad->state.ry = (uint16_t)(65535.0f*adc_2_y);
+        }
     }
 }
 
