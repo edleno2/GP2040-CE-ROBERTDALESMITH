@@ -75,8 +75,9 @@ void JSliderInput::process()
     debounce();
 #endif
 
-    AnalogOptions& analogOptions = Storage::getInstance().getAddonOptions().analogOptions;
     Gamepad * gamepad = Storage::getInstance().GetGamepad();
+#ifdef ANALOG_INPUT_ENABLED
+    AnalogOptions& analogOptions = Storage::getInstance().getAddonOptions().analogOptions;
     if ( analogOptions.analogAdc1Mode != dpadState) {
         analogOptions.analogAdc1Mode = dpadState;
         if (analogOptions.analogAdc1Mode == DPAD_MODE_LEFT_ANALOG) {
@@ -86,13 +87,10 @@ void JSliderInput::process()
         }
         gamepad->save();
     }
-    // if ( analogOptions.analogAdc1Mode != dpadState) {
-    //     analogOptions.analogAdc1Mode = dpadState;
-    //     if (analogOptions.analogAdc1Mode == DPAD_MODE_LEFT_ANALOG) {
-    //         analogOptions.analogAdc2Mode = DPAD_MODE_RIGHT_ANALOG;
-    //     } else {
-    //         analogOptions.analogAdc2Mode = DPAD_MODE_LEFT_ANALOG;
-    //     }
-    //     gamepad->save();
-    // }
+#else
+    if ( gamepad->getOptions().dpadMode != dpadState) {
+        gamepad->setDpadMode(dpadState);
+        gamepad->save();
+    }
+#endif
 }

@@ -9,39 +9,44 @@
 
 #define BOARD_CONFIG_LABEL "Adafruit KB2040"
 
+#include "NeoPico.hpp"
+
 // This is the main pin definition section.
 // This will let you specify which GPIO pin each button is assigned too. 
 // You can set any of the main pins as `-1` to disable it.
 // The Turbo pin and LS + RS slider pins can also be set to `-1` to disable that functionality.
 // Please note that only when `PIN_BUTTON_TURBO` is set to `-1` will the `T##` be removed from a connected display.
-// Please note that only when `PIN_SLIDER_ONE` and  `PIN_SLIDER_TWO` are set to `-1` will the button combo shortcut for DP/LS/RS work.
+// Please note that only when `PIN_SLIDER_LS` and  `PIN_SLIDER_RS` are set to `-1` will the button combo shortcut for DP/LS/RS work.
 // The buttons are listed in GP2040 configuration, beside each the listed order is *GP2040 / Xinput / Switch / PS3 / Directinput / Arcade*
 
-#define PIN_DPAD_UP     27          // UP
+#define PIN_ACTIVE_HIGH 1
+
+#define PIN_DPAD_UP     27           // UP
 #define PIN_DPAD_DOWN   29          // DOWN
-#define PIN_DPAD_RIGHT  28          // RIGHT
 #define PIN_DPAD_LEFT   26          // LEFT
+#define PIN_DPAD_RIGHT  28          // RIGHT
 #define PIN_BUTTON_B1   3           // B1 / A / B / Cross / 2 / K1
 #define PIN_BUTTON_B2   2           // B2 / B / A / Circle / 3 / K2
-#define PIN_BUTTON_R2   8           // R2 / RT / ZR / R2 / 8 / K3
-#define PIN_BUTTON_L2   9           // L2 / LT / ZL / L2 / 7 / K4
 #define PIN_BUTTON_B3   5           // B3 / X / Y / Square / 1 / P1
 #define PIN_BUTTON_B4   4           // B4 / Y / X / Triangle / 4 / P2
-#define PIN_BUTTON_R1   10          // R1 / RB / R / R1 / 6 / P3
-#define PIN_BUTTON_L1   19          // L1 / LB / L / L1 / 5 / P4
+#define PIN_BUTTON_L1   -1          // L1 / LB / L / L1 / 5 / P4
+#define PIN_BUTTON_R1   -1          // R1 / RB / R / R1 / 6 / P3
+#define PIN_BUTTON_L2   9           // L2 / LT / ZL / L2 / 7 / K4
+#define PIN_BUTTON_R2   8           // R2 / RT / ZR / R2 / 8 / K3
 #define PIN_BUTTON_S1   20          // S1 / Back / Minus / Select / 9 / Coin
 #define PIN_BUTTON_S2   18          // S2 / Start / Plus / Start / 10 / Start
-#define PIN_BUTTON_L3   13          // L3 / LS / LS / L3 / 11 / LS
-#define PIN_BUTTON_R3   12          // R3 / RS / RS / R3 / 12 / RS
-#define PIN_BUTTON_A1   0           // A1 / Guide / Home / PS / 13 / ~
-#define PIN_BUTTON_A2   1           // A2 / ~ / Capture / ~ / 14 / ~
+#define PIN_BUTTON_L3   10          // L3 / LS / LS / L3 / 11 / LS
+#define PIN_BUTTON_R3   19          // R3 / RS / RS / R3 / 12 / RS
+#define PIN_BUTTON_A1   -1          // A1 / Guide / Home / PS / 13 / ~
+#define PIN_BUTTON_A2   -1          // A2 / ~ / Capture / ~ / 14 / ~
 #define PIN_BUTTON_FN   -1          // Hotkey Function
+
 #define PIN_BUTTON_TURBO -1         // Turbo
 #define PIN_BUTTON_REVERSE -1       // UDLR Reverse
-#define PIN_SLIDER_ONE    6          // Left Stick Slider
-#define PIN_SLIDER_TWO    7          // Right Stick Slider
-#define PIN_SLIDER_SOCD_ONE    -1         // SOCD Slider Pin One
-#define PIN_SLIDER_SOCD_TWO    -1         // SOCD Slider Pin Two
+#define PIN_SLIDER_ONE    6         // Left Stick Slider
+#define PIN_SLIDER_TWO    7         // Right Stick Slider
+#define PIN_SLIDER_SOCD_ONE   -1    // SOCD Slider Pin One
+#define PIN_SLIDER_SOCD_TWO   -1    // SOCD Slider Pin Two
 
 // This is the SOCD section.
 // SOCD stands for `simultaneous opposing cardinal directions`.
@@ -59,13 +64,13 @@
 
 #define DEFAULT_FORCED_SETUP_MODE FORCED_SETUP_MODE_OFF // 	FORCED_SETUP_MODE_OFF, FORCED_SETUP_MODE_LOCK_MODE_SWITCH, FORCED_SETUP_MODE_LOCK_WEB_CONFIG, FORCED_SETUP_MODE_LOCK_BOTH
 #define DEFAULT_LOCK_HOTKEYS false // or true
+
 #define DEFAULT_INPUT_MODE INPUT_MODE_XINPUT //INPUT_MODE_XINPUT (XInput), INPUT_MODE_SWITCH (Nintendo Switch), INPUT_MODE_HID (D-Input), INPUT_MODE_KEYBOARD (Keyboard)
-#define DEFAULT_DPAD_MODE DPAD_MODE_DIGITAL  //DPAD_MODE_DIGITAL, DPAD_MODE_LEFT_ANALOG, DPAD_MODE_RIGHT_ANALOG, 
+#define DEFAULT_DPAD_MODE DPAD_MODE_DIGITAL  //DPAD_MODE_DIGITAL, DPAD_MODE_LEFT_ANALOG, DPAD_MODE_RIGHT_ANALOG
 
 #define DEFAULT_PS4CONTROLLER_TYPE PS4_CONTROLLER
 
-#define DEFAULT_FORCED_SETUP_MODE FORCED_SETUP_MODE_OFF
-#define DEFAULT_LOCK_HOTKEYS false// This is the LEDs section.
+// This is the LEDs section.
 // The default `TURBO_LED_PIN` pin is set to `15` ( it is recommended to run through 3V3(OUT) with a resistor)
 // The Turbo LED will flash at a speed consistant with the set speed of the Turbo when a Turbo button is active.
 // It is recommended to disable the `TURBO_LED_PIN` by setting it to `-1` if you are sensitive of flashing lights.
@@ -97,19 +102,17 @@
 #define LEDS_PER_PIXEL 1
 
 #define LEDS_DPAD_LEFT   0
-#define LEDS_DPAD_DOWN   0
-#define LEDS_DPAD_RIGHT  0
-#define LEDS_DPAD_UP     0
-#define LEDS_BUTTON_B3   0
-#define LEDS_BUTTON_B4   0
-#define LEDS_BUTTON_R1   0
-#define LEDS_BUTTON_L1   0
-#define LEDS_BUTTON_B1   0
-#define LEDS_BUTTON_B2   0
-#define LEDS_BUTTON_R2   0
-#define LEDS_BUTTON_L2   0
-#define LEDS_BUTTON_S1   0
-#define LEDS_BUTTON_S2   0
+#define LEDS_DPAD_DOWN   1
+#define LEDS_DPAD_RIGHT  2
+#define LEDS_DPAD_UP     3
+#define LEDS_BUTTON_B3   4
+#define LEDS_BUTTON_B4   5
+#define LEDS_BUTTON_R1   6
+#define LEDS_BUTTON_L1   7
+#define LEDS_BUTTON_B1   8
+#define LEDS_BUTTON_B2   9
+#define LEDS_BUTTON_R2   10
+#define LEDS_BUTTON_L2   11
 
 // This is the Player LED section.  
 // In this section you can specify if Player LEDs will be active, and, if active, which pins will be used for them.
@@ -133,8 +136,11 @@
 // The default for `ANALOG_ADC_VRX` and `ANALOG_ADC_VRY` is `-1` which disables them.
 // To enable a `ANALOG_ADC_VRX` and `ANALOG_ADC_VRY`, replace the `-1` with the GPIO pin numbers that are desired. 
 
-#define ANALOG_ADC_1_VRX -1
-#define ANALOG_ADC_1_VRY -1
+#define JSLIDER_ENABLED 1
+#define ANALOG_INPUT_ENABLED 0
+
+#define ANALOG_ADC_1_VRX 1
+#define ANALOG_ADC_1_VRY 1
 #define ANALOG_ADC_1_MODE DPAD_MODE_LEFT_ANALOG
 #define ANALOG_ADC_1_INVERT INVERT_NONE
 
@@ -213,9 +219,17 @@
 #define REVERSE_LEFT_DEFAULT 1
 #define REVERSE_RIGHT_DEFAULT 1
 
-#define JSLIDER_ENABLED 1
 #define BUTTON_LAYOUT BUTTON_LAYOUT_STICK
 #define BUTTON_LAYOUT_RIGHT BUTTON_LAYOUT_VEWLIX
+
+// The default `SPLASH_MODE` is `NOSPLASH`.
+// There are four options for `SPLASH_MODE` currently:
+// 1 - `STATICSPLASH` - This will display the static splash image
+// 2 - `CLOSEIN` - This will display the static splash image as a top and bottom coming together animation
+// 3 - `CLOSEINCUSTOM` - This will display the custom splash image as a top and bottom coming together animation
+// 4 - `NOSPLASH` - This will not display a splash screen on boot
+// Special note - All of the splash screen images can be changed via `include/bitmaps.h`
+
 #define SPLASH_MODE SPLASH_MODE_NONE
 #define SPLASH_CHOICE SPLASH_CHOICE_MAIN
 #define SPLASH_DURATION 7500 // Duration in milliseconds
@@ -250,9 +264,9 @@
 #define BUZZER_VOLUME 100
 
 // Extra Button Add-on setting
-#define EXTRA_BUTTON_MASK 0 // 0 means none, get other mask from GamepadState.h
-                            // For directions, use GAMEPAD_MASK_DU, GAMEPAD_MASK_DD, GAMEPAD_MASK_DL and GAMEPAD_MASK_DR
-#define EXTRA_BUTTON_PIN -1
+#define EXTRA_BUTTON_ENABLED 1
+#define EXTRA_BUTTON_MASK GAMEPAD_MASK_A1 // Sets boot button to Home/Guide button
+#define EXTRA_BUTTON_PIN 11
 
 // Keyboard Mapping Configuration
 // List of HID keycodes can be located here: https://github.com/hathach/tinyusb/blob/3623ba1884ddff23e9b64766cb6dd032f1425846/src/class/hid/hid.h#L356
@@ -276,12 +290,24 @@
 #define KEY_BUTTON_A1   HID_KEY_9             // A1 / Guide / Home / PS / 13 / ~
 #define KEY_BUTTON_A2   HID_KEY_F2            // A2 / ~ / Capture / ~ / 14 / ~
 
-// SNESpad Settings
-// Basic SNES controller clock, latch(strobe), and data IO: https://github.com/gilligan/snesdev/blob/master/docs/fullsnes.txt#L16048
-// CLOCK == SNES_CTRL_PIN_2, LATCH == SNES_CTRL_PIN_3, and DATA = SNES_CTRL_PIN_4
-#define SNES_PAD_ENABLED 0
-#define SNES_PAD_CLOCK_PIN -1
-#define SNES_PAD_LATCH_PIN -1
-#define SNES_PAD_DATA_PIN -1
+// Hotkey Action Mapping
+// Find the list of hotkey actions in GamepadEnums.h
+#define HOTKEY_F1_UP_MASK      GAMEPAD_MASK_UP
+#define HOTKEY_F1_UP_ACTION    HOTKEY_HOME_BUTTON
+#define HOTKEY_F1_DOWN_MASK    GAMEPAD_MASK_DOWN
+#define HOTKEY_F1_DOWN_ACTION  HOTKEY_DPAD_DIGITAL
+#define HOTKEY_F1_LEFT_MASK    GAMEPAD_MASK_LEFT
+#define HOTKEY_F1_LEFT_ACTION  HOTKEY_DPAD_LEFT_ANALOG
+#define HOTKEY_F1_RIGHT_MASK   GAMEPAD_MASK_RIGHT
+#define HOTKEY_F1_RIGHT_ACTION HOTKEY_DPAD_RIGHT_ANALOG
+
+#define HOTKEY_F2_UP_MASK      GAMEPAD_MASK_UP
+#define HOTKEY_F2_UP_ACTION    HOTKEY_SOCD_UP_PRIORITY
+#define HOTKEY_F2_DOWN_MASK    GAMEPAD_MASK_DOWN
+#define HOTKEY_F2_DOWN_ACTION  HOTKEY_SOCD_NEUTRAL
+#define HOTKEY_F2_LEFT_MASK    GAMEPAD_MASK_LEFT
+#define HOTKEY_F2_LEFT_ACTION  HOTKEY_SOCD_LAST_INPUT
+#define HOTKEY_F2_RIGHT_MASK   GAMEPAD_MASK_RIGHT
+#define HOTKEY_F2_RIGHT_ACTION HOTKEY_INVERT_Y_AXIS
 
 #endif
