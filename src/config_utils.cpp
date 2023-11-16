@@ -671,41 +671,67 @@ void gpioMappingsMigrationCore(Config& config)
     }
 
     // convert JS slider pin mappings to GPIO mapping config
-    if (jsSliderOptions.enabled && isValidPin(jsSliderOptions.deprecatedPinSliderOne)) {
-        switch (jsSliderOptions.deprecatedModeOne) {
+    // if (jsSliderOptions.enabled && isValidPin(jsSliderOptions.deprecatedPinSliderOne)) {
+    //     switch (jsSliderOptions.deprecatedModeOne) {
+    //         case DpadMode::DPAD_MODE_DIGITAL: {
+    //             actions[jsSliderOptions.deprecatedPinSliderOne] = GpioAction::SUSTAIN_DP_MODE_DP; break;
+    //         }
+    //         case DpadMode::DPAD_MODE_LEFT_ANALOG: {
+    //             actions[jsSliderOptions.deprecatedPinSliderOne] = GpioAction::SUSTAIN_DP_MODE_LS; break;
+    //         }
+    //         case DpadMode::DPAD_MODE_RIGHT_ANALOG: {
+    //             actions[jsSliderOptions.deprecatedPinSliderOne] = GpioAction::SUSTAIN_DP_MODE_RS; break;
+    //         }
+    //         default: break;
+    //     }
+    //     jsSliderOptions.deprecatedPinSliderOne = -1;
+    // }
+    // else
+    // ^^^^ disables because it breaks setting silder configs correctly
+    if (isValidPin(PIN_SLIDER_ONE)) {
+        switch (SLIDER_MODE_ONE) {
             case DpadMode::DPAD_MODE_DIGITAL: {
-                actions[jsSliderOptions.deprecatedPinSliderOne] = GpioAction::SUSTAIN_DP_MODE_DP; break;
+                actions[PIN_SLIDER_ONE] = GpioAction::SUSTAIN_DP_MODE_DP; break;
             }
             case DpadMode::DPAD_MODE_LEFT_ANALOG: {
-                actions[jsSliderOptions.deprecatedPinSliderOne] = GpioAction::SUSTAIN_DP_MODE_LS; break;
+                actions[PIN_SLIDER_ONE] = GpioAction::SUSTAIN_DP_MODE_LS; break;
             }
             case DpadMode::DPAD_MODE_RIGHT_ANALOG: {
-                actions[jsSliderOptions.deprecatedPinSliderOne] = GpioAction::SUSTAIN_DP_MODE_RS; break;
+                actions[PIN_SLIDER_ONE] = GpioAction::SUSTAIN_DP_MODE_RS; break;
             }
             default: break;
         }
-        jsSliderOptions.deprecatedPinSliderOne = -1;
     }
-    else if (isValidPin(PIN_SLIDER_ONE)) {
-        actions[PIN_SLIDER_ONE] = GpioAction::SUSTAIN_DP_MODE_LS;
-    }
-    if (jsSliderOptions.enabled && isValidPin(jsSliderOptions.deprecatedPinSliderTwo)) {
-        switch (jsSliderOptions.deprecatedModeTwo) {
+    // if (jsSliderOptions.enabled && isValidPin(jsSliderOptions.deprecatedPinSliderTwo)) {
+    //     switch (jsSliderOptions.deprecatedModeTwo) {
+    //         case DpadMode::DPAD_MODE_DIGITAL: {
+    //             actions[jsSliderOptions.deprecatedPinSliderTwo] = GpioAction::SUSTAIN_DP_MODE_DP; break;
+    //         }
+    //         case DpadMode::DPAD_MODE_LEFT_ANALOG: {
+    //             actions[jsSliderOptions.deprecatedPinSliderTwo] = GpioAction::SUSTAIN_DP_MODE_LS; break;
+    //         }
+    //         case DpadMode::DPAD_MODE_RIGHT_ANALOG: {
+    //             actions[jsSliderOptions.deprecatedPinSliderTwo] = GpioAction::SUSTAIN_DP_MODE_RS; break;
+    //         }
+    //         default: break;
+    //     }
+    //     jsSliderOptions.deprecatedPinSliderTwo = -1;
+    // }
+    // else
+    // ^^^^ disables because it breaks setting silder configs correctly
+    if (isValidPin(PIN_SLIDER_TWO)) {
+        switch (SLIDER_MODE_TWO) {
             case DpadMode::DPAD_MODE_DIGITAL: {
-                actions[jsSliderOptions.deprecatedPinSliderTwo] = GpioAction::SUSTAIN_DP_MODE_DP; break;
+                actions[PIN_SLIDER_TWO] = GpioAction::SUSTAIN_DP_MODE_DP; break;
             }
             case DpadMode::DPAD_MODE_LEFT_ANALOG: {
-                actions[jsSliderOptions.deprecatedPinSliderTwo] = GpioAction::SUSTAIN_DP_MODE_LS; break;
+                actions[PIN_SLIDER_TWO] = GpioAction::SUSTAIN_DP_MODE_LS; break;
             }
             case DpadMode::DPAD_MODE_RIGHT_ANALOG: {
-                actions[jsSliderOptions.deprecatedPinSliderTwo] = GpioAction::SUSTAIN_DP_MODE_RS; break;
+                actions[PIN_SLIDER_TWO] = GpioAction::SUSTAIN_DP_MODE_RS; break;
             }
             default: break;
         }
-        jsSliderOptions.deprecatedPinSliderTwo = -1;
-    }
-    else if (isValidPin(PIN_SLIDER_TWO)) {
-        actions[PIN_SLIDER_TWO] = GpioAction::SUSTAIN_DP_MODE_RS;
     }
 
     // convert SOCD slider pin mappings to GPIO mapping config

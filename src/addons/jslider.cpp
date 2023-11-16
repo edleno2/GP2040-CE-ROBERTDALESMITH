@@ -61,6 +61,11 @@ void JSliderInput::debounce()
             // Bounce Left Analog
             case DPAD_MODE_LEFT_ANALOG:
                 dDebState = (DpadMode)(dDebState ^ DPAD_MODE_LEFT_ANALOG);
+#ifdef ANALOG_INPUT_ENABLED
+            default:
+                if ( (dpadState ^ dDebState) & DPAD_MODE_LEFT_ANALOG )
+                    dDebState = (DpadMode)(dDebState ^ DPAD_MODE_LEFT_ANALOG);
+#endif
         }
         uDebTime = uNowTime;
         dpadState = dDebState;
@@ -80,9 +85,10 @@ void JSliderInput::process()
     AnalogOptions& analogOptions = Storage::getInstance().getAddonOptions().analogOptions;
     if ( analogOptions.analogAdc1Mode != dpadState) {
         analogOptions.analogAdc1Mode = dpadState;
-        if (analogOptions.analogAdc1Mode == DPAD_MODE_LEFT_ANALOG) {
+        if (dpadState == DPAD_MODE_LEFT_ANALOG) {
             analogOptions.analogAdc2Mode = DPAD_MODE_RIGHT_ANALOG;
-        } else {
+        }
+        else if (dpadState == DPAD_MODE_RIGHT_ANALOG) {
             analogOptions.analogAdc2Mode = DPAD_MODE_LEFT_ANALOG;
         }
         gamepad->save();

@@ -288,7 +288,7 @@ void Gamepad::read()
 		Mask_t values = gpio_get_all();
 	#else
 		// Need to invert since we're using pullups
-		Mask_t values = ~gpio_get_all();;
+		Mask_t values = ~gpio_get_all();
 	#endif
 	// Get the midpoint value for the current mode
 	uint16_t joystickMid = GetJoystickMidValue(options.inputMode);
