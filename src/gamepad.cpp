@@ -279,6 +279,18 @@ void Gamepad::process()
 			}
 			break;
 	}
+
+    AnalogOptions& analogOptions = Storage::getInstance().getAddonOptions().analogOptions;
+
+	if (analogOptions.analogAdc1Mode == DPAD_MODE_RIGHT_ANALOG) {
+			// KB2040-FISHERPRICE-V2 map the R3 button with L3 value due to slider logic
+		if (pressedL3())
+		{
+			state.buttons |= GAMEPAD_MASK_R3;
+			state.buttons &= ~GAMEPAD_MASK_L3;
+		}
+	}
+
 }
 
 void Gamepad::read()
